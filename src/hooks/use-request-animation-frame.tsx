@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type DrawParameters<T> = T;
 
@@ -20,7 +20,7 @@ function useRequestAnimationFrame<T>({
 
   const startAnimation = () => setIsStart(true);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isStart) {
       requestAnimationFrame(function animate(time) {
         if (previousTimeRef.current === 0) {
