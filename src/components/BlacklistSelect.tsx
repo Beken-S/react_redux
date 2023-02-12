@@ -5,7 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import { isPenultimateIndex, isEmptyArray } from 'common/array-helpers';
 import { useAppDispatch } from 'hooks';
-import { addToBlacklist, User } from 'models/settings';
+import { addToBlacklist } from 'models/blacklist';
+import { User } from 'models/user';
 import { useState, useCallback, useEffect } from 'react';
 
 type BlacklistSelectProps = {

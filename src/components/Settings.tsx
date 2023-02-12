@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Blacklist from 'components/Blacklist';
 import SettingsForm from 'components/SettingsForm';
 import { useAppDispatch } from 'hooks';
-import { resetErrors } from 'models/settings';
+import { resetErrors } from 'models/errors';
 import { useCallback, useState } from 'react';
 
 const Settings: React.FC = () => {

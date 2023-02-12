@@ -5,7 +5,7 @@ import { isEmptyArray } from 'common/array-helpers';
 import BlacklistItem from 'components/BlacklistItem';
 import BlacklistSelect from 'components/BlacklistSelect';
 import { useAppSelector } from 'hooks';
-import { selectBlacklist, selectReviewers } from 'models/settings';
+import { selectBlacklist, selectReviewers } from 'models/blacklist';
 import { shallowEqual } from 'react-redux';
 
 const Blacklist: React.FC = () => {

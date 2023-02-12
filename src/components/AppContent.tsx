@@ -5,7 +5,9 @@ import { isEmptyArray } from 'common/array-helpers';
 import Roulette from 'components/Roulette';
 import UserCard from 'components/UserCard';
 import { useAppSelector } from 'hooks';
-import { selectReviewers, selectUser, selectRepositoryName } from 'models/settings';
+import { selectReviewers } from 'models/blacklist';
+import { selectRepositoryName } from 'models/repository';
+import { selectUser } from 'models/user';
 import { shallowEqual } from 'react-redux';
 
 const AppContent: React.FC = () => {

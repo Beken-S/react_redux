@@ -3,17 +3,10 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { BaseError, TypeError, ERROR_CODE } from 'common/errors';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import {
-  fetchSettings,
-  selectUserLogin,
-  selectFetchStatus,
-  selectRepositoryName,
-  selectUserError,
-  selectRepositoryError,
-  setUserError,
-  setRepositoryError,
-  resetErrors,
-} from 'models/settings';
+import { resetErrors, selectErrors, setRepositoryError, setUserError } from 'models/errors';
+import { fetchSettings, selectLoadingStatus } from 'models/loading';
+import { selectRepositoryName } from 'models/repository';
+import { selectUserLogin } from 'models/user';
 import { useState, ChangeEventHandler, FormEventHandler, useEffect } from 'react';
 import { shallowEqual } from 'react-redux';
 
@@ -24,33 +17,32 @@ const enum FormId {
 
 const SettingsForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(selectFetchStatus);
+  const isLoading = useAppSelector(selectLoadingStatus);
   const currentUserLogin = useAppSelector(selectUserLogin);
   const currentRepositoryName = useAppSelector(selectRepositoryName);
-  const userError = useAppSelector(selectUserError, shallowEqual);
-  const repositoryError = useAppSelector(selectRepositoryError, shallowEqual);
+  const errors = useAppSelector(selectErrors, shallowEqual);
   const [userLogin, setUserLogin] = useState(currentUserLogin);
   const [repositoryName, setRepositoryName] = useState(currentRepositoryName);
   const [isDisabled, setIsDisabled] = useState(true);
 
   const onSubmitHandler: FormEventHandler<HTMLFormElement> = (event): void => {
     event.preventDefault();
-    if (userLogin !== '' && repositoryName !== '') {
-      dispatch(fetchSettings(userLogin, repositoryName));
-      return;
-    }
+
     if (userLogin === '') {
       dispatch(setUserError(new TypeError('Пожалуйста введите логин пользователя.')));
     }
     if (repositoryName === '') {
       dispatch(setRepositoryError(new TypeError('Пожалуйста введите название репозитория.')));
     }
+    if (userLogin !== '' && repositoryName !== '') {
+      dispatch(fetchSettings(userLogin, repositoryName));
+    }
   };
 
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
     const target: HTMLInputElement = event.currentTarget;
 
-    if (userError != null || repositoryError != null) {
+    if (errors.user != null || errors.repository != null) {
       dispatch(resetErrors());
     }
 
@@ -66,12 +58,8 @@ const SettingsForm: React.FC = () => {
   };
 
   useEffect(() => {
-    if (userError !== null || repositoryError !== null) {
-      setIsDisabled(true);
-    } else {
-      setIsDisabled(false);
-    }
-  }, [userError, repositoryError]);
+    setIsDisabled(errors.user != null || errors.repository != null);
+  }, [errors]);
 
   return (
     <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={onSubmitHandler}>
@@ -79,8 +67,8 @@ const SettingsForm: React.FC = () => {
         id={FormId.userLogin}
         value={userLogin}
         onChange={onChangeHandler}
-        error={userError != null}
-        helperText={userError != null ? getErrorHelperText(userError) : ''}
+        error={errors.user != null}
+        helperText={errors.user != null ? getErrorHelperText(errors.user) : ''}
         margin="normal"
         fullWidth
         label="Логин"
@@ -90,8 +78,8 @@ const SettingsForm: React.FC = () => {
         id={FormId.repositoryName}
         value={repositoryName}
         onChange={onChangeHandler}
-        error={repositoryError != null}
-        helperText={repositoryError != null ? getErrorHelperText(repositoryError) : ''}
+        error={errors.repository != null}
+        helperText={errors.repository != null ? getErrorHelperText(errors.repository) : ''}
         margin="normal"
         fullWidth
         label="Репозиторий"
