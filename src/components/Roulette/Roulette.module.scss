@@ -1,0 +1,18 @@
+.wrapper {
+  box-sizing: content-box;
+  min-width: 200px;
+  height: var(--height);
+  padding: 8px 16px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: content-box;
+  padding-bottom: 8px;
+  transform: translateY(var(--position, 0));
+}
